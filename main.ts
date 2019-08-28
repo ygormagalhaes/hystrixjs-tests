@@ -29,20 +29,17 @@ const sampleData = {
 
 function getData(): Promise<any> {
     return new Promise((resolve, reject) => {
+        const timeoutBetween10and1000 = Math.floor((Math.random() * 1000) + 10);
         setTimeout(() => {
-            if (Date.now() % 2 === 0) {
-                resolve(sampleData);
-            } else {
-                reject(new Error('Wrong time to send the request ;)'));
-            }
-        }, 800);
+            resolve(sampleData);
+        }, timeoutBetween10and1000);
     });
 }
 
 const service = commandFactory.getOrCreate('DataService')
     .circuitBreakerSleepWindowInMilliseconds(10000)
     .circuitBreakerErrorThresholdPercentage(50)
-    .timeout(1000)
+    .timeout(300)
     .run(getData)
     .build();
 
